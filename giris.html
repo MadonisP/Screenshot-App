@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proje3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+    <input class="ekrang" type="text" name="" id="name" placeholder="Dosya ismini yazınız.">
+    <button class="ekrang" id="yazi" onclick="deneme()">Kaydet</button>
+    <button class="ekrang" id="cikis" onclick="cikis()">X</button>
+    <button class="ekrang" id="gizle" onclick="gizle()">Gizle</button>
+    </div>
+
+</body>
+<script>
+
+    const electron =require("electron");
+    const {ipcRenderer}=electron;
+
+    function deneme() {
+
+        const screenshot = require('screenshot-desktop')
+        const fs = require('fs')
+
+        let gonderBtn =document.getElementById("yazi");
+        let Name = document.getElementById("name").value
+
+        ipcRenderer.send("pencere:gizle");
+
+        screenshot().then((img) => {
+            fs.writeFile(Name + '.jpg', img, function (err) {
+                if (err) {
+                    throw err
+                }
+                console.log('written to ' + Name + '.jpg')
+            })
+        }).catch((err) => {
+            throw err
+        })
+    }
+
+
+
+    function cikis(){
+        window.close();
+    }
+
+    function gizle(){
+         ipcRenderer.send("pencere:gizle");
+    }
+    
+</script>
+
+</html>
